@@ -6,7 +6,41 @@ import sys
 import threading
 import os
 import json
-import pymem
+
+def close(string: str):
+    input(string)
+    exit()
+
+try:
+    import pymem
+except ModuleNotFoundError:
+    os.system('pip install pymem')
+    try:
+        import pymem
+    except ModuleNotFoundError:
+        os.system('python -m pip install pymem')
+        try:
+            import pymem
+        except ModuleNotFoundError:
+            close('Something went wrong while installing pymem')
+    os.system('python injector.py')
+    exit()
+
+try:
+    import colorama
+except ModuleNotFoundError:
+    os.system('pip install colorama')
+    try:
+        import colorama
+    except ModuleNotFoundError:
+        os.system('python -m pip install colorama')
+        try:
+            import colorama
+        except ModuleNotFoundError:
+            close('Something went wrong while installing colorama')
+    os.system('python injector.py')
+    exit()
+
 from colorama import init as colorama_init
 from colorama import Fore, Back, Style
 
@@ -36,10 +70,6 @@ def removeLines(n: int = 1): # https://stackoverflow.com/questions/19596750
         sys.stdout.write('\x1b[1A') # cursor up one line
         sys.stdout.write('\x1b[2K') # delete last line
     return
-
-def close(string: str):
-    input(string)
-    exit()
 
 offsets = loadCache('offsets')
 if len(offsets) == 0:
@@ -450,14 +480,14 @@ class Netflix:
 
 Netflix = Netflix()
 
-
+NoThreading = False
 def getWindowsPlayer():
-    while not Netflix.ProcessID:
+    while not Netflix.ProcessID and not NoThreading:
         #print(f'{Fore.WHITE}{Style.DIM}[*] Finding RobloxPlayerBeta.exe{Style.RESET_ALL}')
         Netflix.YieldForProgram("RobloxPlayerBeta.exe", True, 1)
 
 def getUniversalPlayer():
-    while not Netflix.ProcessID:
+    while not Netflix.ProcessID and not NoThreading:
         #print(f'{Fore.WHITE}{Style.DIM}[*] Finding Windows10Universal.exe{Style.RESET_ALL}')
         Netflix.YieldForProgram("Windows10Universal.exe", True, 1)
 
@@ -466,8 +496,14 @@ winThread = threading.Thread(target = getWindowsPlayer)
 uniThread = threading.Thread(target = getUniversalPlayer)
 winThread.start()
 uniThread.start()
-while not Netflix.ProcessID:
-    pass
+try:
+    while not Netflix.ProcessID:
+        if NoThreading:
+            close(f'{Fore.RED}[-] Cancelled Threads{Style.RESET_ALL}')
+        pass
+except KeyboardInterrupt:
+    NoThreading = True
+    close(f'{Fore.RED}[-] Cancelled Threads{Style.RESET_ALL}')
 print(f'{Fore.GREEN}[+] Found {Netflix.ProgramName == "RobloxPlayerBeta.exe" and "Windows" or "Universal"} Client{Style.RESET_ALL}')
 
 def ReadRobloxString(ExpectedAddress: int) -> str:
@@ -815,6 +851,8 @@ def inject():
         for scriptAddress in playerScripts.GetChildren():
             print(f'{Fore.WHITE}{Style.DIM}[+] {GetName(scriptAddress)} ({GetClassName(scriptAddress)}){Style.RESET_ALL}')
 
+    if not targetScript:
+        close(f'{Fore.RED}[-] Injection failed, Please try another game{Style.RESET_ALL}')
 
     injectScript = 0
     results = Netflix.AOBSCANALL("496E6A656374????????????????????06", True)
@@ -844,12 +882,8 @@ def inject():
         close(f'{Fore.RED}[-] No injection payload found{Style.RESET_ALL}')
     injectScript = toInstance(injectScript)
     print(f'{Fore.GREEN}[+] Found injection payload: {Netflix.d2h(injectScript.Address)}{Style.RESET_ALL}')
-
-    if targetScript:
-        b = Netflix.Pymem.read_bytes(injectScript.Self + 0x100, 0x150)
-        Netflix.Pymem.write_bytes(targetScript.Self + 0x100, b, len(b))
-    else:
-        close(f'{Fore.RED}[-] Injection failed, Please try another game{Style.RESET_ALL}')
+    b = Netflix.Pymem.read_bytes(injectScript.Self + 0x100, 0x150)
+    Netflix.Pymem.write_bytes(targetScript.Self + 0x100, b, len(b))
     return True
 
 print(f'Join {Fore.LIGHTBLUE_EX}https://roblox.com/games/15167092402{Style.RESET_ALL} before visiting your target game')
