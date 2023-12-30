@@ -23,8 +23,8 @@ except ModuleNotFoundError:
             import pymem
         except ModuleNotFoundError:
             close('Something went wrong while installing pymem')
-    os.system('python injector.py')
-    close('Relaunched injector.py')
+    os.system('start run_me.bat')
+    close('Relaunch run_me.bat')
 
 try:
     import colorama
@@ -38,8 +38,8 @@ except ModuleNotFoundError:
             import colorama
         except ModuleNotFoundError:
             close('Something went wrong while installing colorama')
-    os.system('python injector.py')
-    close('Relaunched injector.py')
+    os.system('start run_me.bat')
+    close('Relaunch run_me.bat')
 
 from colorama import init as colorama_init
 from colorama import Fore, Back, Style
