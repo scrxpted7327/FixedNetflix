@@ -889,3 +889,5 @@ if inject():
 else:
     print(f'{Fore.RED}[-] Injection Failed{Style.RESET_ALL}!')
     print(f'{Fore.RED}[-] Join {Fore.LIGHTBLUE_EX}discord.gg/byefron{Style.RESET_ALL} for help')
+
+input('Press enter to exit.')
