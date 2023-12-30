@@ -24,7 +24,7 @@ except ModuleNotFoundError:
         except ModuleNotFoundError:
             close('Something went wrong while installing pymem')
     os.system('python injector.py')
-    exit()
+    close('Relaunched injector.py')
 
 try:
     import colorama
@@ -39,7 +39,7 @@ except ModuleNotFoundError:
         except ModuleNotFoundError:
             close('Something went wrong while installing colorama')
     os.system('python injector.py')
-    exit()
+    close('Relaunched injector.py')
 
 from colorama import init as colorama_init
 from colorama import Fore, Back, Style
@@ -90,24 +90,17 @@ def updateOffset(offset, value):
 
 # creds meow
 print(f'''                                                     
-                    ad88 88 88
-            ,d      d8"   88 ""
-            88      88    88
-8b,dPPYba,   ,adPPYba, MM88MMM MM88MMM 88 88 8b,     ,d8
-88P'   `"8a a8P_____88   88      88    88 88  `Y8, ,8P'
-88       88 8PP"""""""   88      88    88 88    )888(
-88       88 "8b,   ,aa   88,     88    88 88  ,d8" "8b,
-88       88  `"Ybbd8"'   "Y888   88    88 88 8P'     `Y8                                                   
+             _    __ _ _                    
+            | |  / _| (_)                   
+  _ __   ___| |_| |_| |___  __  _ __  _   _ 
+ | '_ \ / _ \ __|  _| | \ \/ / | '_ \| | | |
+ | | | |  __/ |_| | | | |>  < _| |_) | |_| |
+ |_| |_|\___|\__|_| |_|_/_/\_(_) .__/ \__, |
+                               | |     __/ |
+                               |_|    |___/                                                
 ''')
 
-print(f'''                                                     
-                 ___                 __                 
-   __ _  __ _   / / |__  _   _  ___ / _|_ __ ___  _ __  
-  / _` |/ _` | / /| '_ \| | | |/ _ \ |_| '__/ _ \| '_ \ 
- | (_| | (_| |/ / | |_) | |_| |  __/  _| | | (_) | | | |
-(_)__, |\__, /_/  |_.__/ \__, |\___|_| |_|  \___/|_| |_|
-  |___/ |___/            |___/                                                                           
-''')
+print(f'Join the discord: {Fore.LIGHTBLUE_EX}.gg/byefron{Style.RESET_ALL} for news and updates')
 
 class Netflix:
     def __init__(self, ProgramName=None):
@@ -848,8 +841,6 @@ def inject():
     if not targetScript:
         playerScripts = toInstance(localPlayer.FindFirstChild('PlayerScripts'))
         print(f'{Fore.GREEN}[+] Found PlayerScripts{Style.RESET_ALL}')
-        for scriptAddress in playerScripts.GetChildren():
-            print(f'{Fore.WHITE}{Style.DIM}[+] {GetName(scriptAddress)} ({GetClassName(scriptAddress)}){Style.RESET_ALL}')
 
     if not targetScript:
         close(f'{Fore.RED}[-] Injection failed, Please try another game{Style.RESET_ALL}')
